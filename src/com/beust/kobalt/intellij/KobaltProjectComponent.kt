@@ -8,6 +8,7 @@ import com.intellij.notification.NotificationGroup
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.ProjectComponent
+import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.module.Module
 import com.intellij.openapi.module.ModuleManager
@@ -29,7 +30,11 @@ import com.intellij.openapi.vfs.JarFileSystem
 import com.intellij.openapi.vfs.VirtualFileManager
 import com.intellij.psi.search.FilenameIndex
 import com.intellij.psi.search.GlobalSearchScope
-import java.io.*
+import java.io.BufferedReader
+import java.io.File
+import java.io.IOException
+import java.io.InputStreamReader
+import java.io.PrintWriter
 import java.net.ConnectException
 import java.net.Socket
 import java.nio.file.Path
@@ -59,6 +64,7 @@ class KobaltProjectComponent(val project: Project) : ProjectComponent {
 
     fun syncBuildFile() {
         LOG.info("Syncing build file for project $project")
+        val provider = ServiceManager.getService(KobaltSettingsProvider::class.java)
 
         val version = KobaltApplicationComponent.version!!
 

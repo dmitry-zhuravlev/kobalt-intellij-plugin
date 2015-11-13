@@ -64,6 +64,15 @@
         <weigher key="completion" implementationClass="com.beust.kobalt.intellij.KobaltWeigher" />
     </extensions>
 -->
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationConfigurable instance="com.beust.kobalt.intellij.KobaltSettings"
+                                 bundle="KobaltSettingsKt"
+                                 groupId="build"
+                                 nonDefaultProject="true"
+                                 key="settings.kobalt.name">
+        </applicationConfigurable>
+        <applicationService serviceImplementation="com.beust.kobalt.intellij.KobaltSettingsProvider"/>
+    </extensions>
 
     <actions>
         <group id="kobalt.MainMenu" text="_Kobalt" description="Kobalt">

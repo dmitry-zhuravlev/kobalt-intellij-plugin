@@ -5,6 +5,7 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.ApplicationComponent
+import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.progress.util.StatusBarProgress
 import java.io.BufferedReader
@@ -60,6 +61,7 @@ public class KobaltApplicationComponent : ApplicationComponent {
     }
 
     override fun initComponent() {
+        val provider = ServiceManager.getService(KobaltSettingsProvider::class.java)
         var progress = StatusBarProgress().apply {
             start()
             text = "Downloading Kobalt $version"

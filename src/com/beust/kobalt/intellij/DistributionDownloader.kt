@@ -1,5 +1,6 @@
 package com.beust.kobalt.intellij
 
+import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.progress.util.ProgressIndicatorBase
 import java.io.File
