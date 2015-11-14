@@ -4,7 +4,9 @@ import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.options.Configurable
 import java.util.*
 import javax.swing.JComponent
+import javax.swing.JSpinner
 import javax.swing.JTextField
+import javax.swing.SpinnerNumberModel
 import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
 
@@ -14,6 +16,7 @@ class KobaltSettings(var provider: KobaltSettingsProvider) : Configurable {
 
     var form: KobaltSettingsForm = KobaltSettingsForm()
     var kobaltVersion: JTextField = form.kobaltVersion
+    var serverPort: JSpinner = form.kobaltServerPort
 
     var stateChanged: Boolean = false
 
@@ -23,8 +26,10 @@ class KobaltSettings(var provider: KobaltSettingsProvider) : Configurable {
 
     override fun apply() {
         provider.kobaltState.kobaltVersion = kobaltVersion.text
-        stateChanged = false
+        provider.kobaltState.kobaltServerPort = serverPort.value as Int
         ServiceManager.getService(KobaltProjectComponent::class.java)?.syncBuildFile()
+        stateChanged = false
+
     }
 
     override fun createComponent(): JComponent? {
@@ -43,11 +48,18 @@ class KobaltSettings(var provider: KobaltSettingsProvider) : Configurable {
             }
         })
 
+        serverPort.apply {
+            model = SpinnerNumberModel(provider.kobaltState.kobaltServerPort, Constants.MIN_SERVER_PORT, Constants.MAX_SERVER_PORT, 1)
+            editor = JSpinner.NumberEditor(serverPort, "#####")
+            addChangeListener { event -> stateChanged = true}
+        }
+
         return form.myPanel
     }
 
     override fun reset() {
         kobaltVersion.text = provider.kobaltState.kobaltVersion
+        serverPort.value = provider.kobaltState.kobaltServerPort
         stateChanged = false
     }
 

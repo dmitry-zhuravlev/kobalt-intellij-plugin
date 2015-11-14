@@ -13,12 +13,14 @@ class KobaltSettingsProvider : PersistentStateComponent<KobaltSettingsProvider.S
 
     class State {
         public var kobaltVersion: String = Constants.MIN_KOBALT_VERSION
+        public var kobaltServerPort: Int = Constants.DEFAULT_SERVER_PORT
     }
 
     var kobaltState: State = State();
 
     override fun loadState(state: KobaltSettingsProvider.State?) {
         if(state != null) {
+            kobaltState.kobaltServerPort = state.kobaltServerPort
             kobaltState.kobaltVersion = state.kobaltVersion
         }
     }
