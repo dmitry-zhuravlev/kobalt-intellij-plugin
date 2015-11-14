@@ -372,8 +372,16 @@ class KobaltProjectComponent(val project: Project) : ProjectComponent {
     }
 
     private fun findPort() : Int {
-        if (Constants.DEV_MODE) return 1234
-        else for (i in 1234..65000) {
+        if (Constants.DEV_MODE) {
+            val provider = ServiceManager.getService(KobaltSettingsProvider::class.java)
+            return if(provider.kobaltState.kobaltServerPort != Constants.DEFAULT_SERVER_PORT){
+                provider.kobaltState.kobaltServerPort
+            } else {
+                Constants.DEFAULT_SERVER_PORT
+            }
+
+        }
+        else for (i in Constants.DEFAULT_SERVER_PORT..65000) {
             if (isPortAvailable(i)) return i
         }
         throw IllegalArgumentException("Couldn't find any port available, something is very wrong")
